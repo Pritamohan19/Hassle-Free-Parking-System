@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .area-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .area {
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 45%;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 4px;
+            text-align: left;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        td {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">User Dashboard</h1>
+
+        <!-- Booking Details Section -->
+        <div>
+            <h2>Booking Details</h2>
+            <ul>
+                {% for booking in user_bookings %}
+                    <li>
+                        Booking ID: {{ booking.id }} - Slot: {{ booking.slot.slot_number }} - 
+                        Status: {{ booking.status }} - Time: {{ booking.time }}
+                    </li>
+                {% empty %}
+                    <li>No bookings found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Available Slots Section -->
+        <div>
+            <h2>Available Parking Slots</h2>
+            <div class="area-container">
+                {% for area in areas %}
+                    <div class="area">
+                        <h3>Area: {{ area.name }}</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Subarea</th>
+                                    <th>Slot Number</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subarea in area.subareas.all %}
+                                    {% for slot in subarea.parkingslots.all %}
+                                        <tr>
+                                            {% if forloop.first %}
+                                                <td rowspan="{{ subarea.parkingslots.count }}">{{ subarea.name }}</td>
+                                            {% endif %}
+                                            <td>
+                                                <form method="post" action="{% url 'parking:book_slot' slot.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-primary">Book Slot</button>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                {% if slot.is_available %}
+                                                    <span class="text-success">Available</span>
+                                                {% else %}
+                                                    <span class="text-danger">Booked</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td>{{ subarea.name }}</td>
+                                            <td colspan="2">No slots available in this subarea.</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="3">No subareas available in this area.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% empty %}
+                    <p>No areas available.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Messages Section -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Unpaid Bookings Alert -->
+        {% if has_unpaid_bookings %}
+            <div class="alert alert-warning">
+                <strong>Notice:</strong> You have unpaid bookings. Please complete payment to make new reservations.
+            </div>
+        {% endif %}
+
+        <!-- Current Bookings Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Your Current Bookings</h2>
+            </div>
+            <div class="card-body">
+                {% if bookings %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                    <th>Reserved At</th>
+                                    <th>Grace Period</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in bookings %}
+                                    <tr>
+                                        <td>
+                                            <span class="badge rounded-pill 
+                                                {% if booking.status == 'reserved' %}bg-warning
+                                                {% elif booking.status == 'active' %}bg-success
+                                                {% elif booking.status == 'completed' %}bg-primary
+                                                {% elif booking.status == 'expired' %}bg-danger
+                                                {% endif %}">
+                                                {{ booking.status|title }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if booking.status == 'reserved' and booking.expiry_time > current_time %}
+                                                <form method="post" action="{% url 'parking:start_parking' booking.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-success btn-sm">Start Parking</button>
+                                                </form>
+                                            {% elif booking.status == 'active' %}
+                                                <form method="post" action="{% url 'parking:end_parking' booking.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger btn-sm">End Parking</button>
+                                                </form>
+                                            {% elif booking.status == 'completed' and not booking.paid %}
+                                                <form method="get" action="{% url 'parking:payment_page' booking.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-primary btn-sm">Pay Now</button>
+                                                </form>
+                                            {% elif booking.status == 'completed' %}
+                                                <button class="btn btn-secondary btn-sm" disabled>Completed</button>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if booking.start_time %}
+                                                {{ booking.start_time|date:"M d, Y H:i" }}
+                                            {% else %}
+                                                --
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if booking.status == 'reserved' %}
+                                                {% if booking.expiry_time > current_time %}
+                                                    <span data-expiry-time="{{ booking.expiry_time|date:'Y-m-d H:i:s' }}"></span>
+                                                {% else %}
+                                                    <span class="text-danger">Completed</span>
+                                                {% endif %}
+                                            {% elif booking.status == 'active' %}
+                                                <span>Active</span>
+                                            {% elif booking.status == 'completed' %}
+                                                <span>Completed</span>
+                                            {% else %}
+                                                N/A
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p>You don't have any bookings yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const countdownElements = document.querySelectorAll('[data-expiry-time]');
+
+            countdownElements.forEach(function (element) {
+                const expiryTime = new Date(element.dataset.expiryTime).getTime();
+
+                function updateCountdown() {
+                    const now = new Date().getTime();
+                    const timeLeft = expiryTime - now;
+
+                    if (timeLeft <= 0) {
+                        element.textContent = 'Completed';
+                        element.classList.add('text-danger');
+                        clearInterval(interval);
+                    } else {
+                        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                        element.textContent = `${minutes}m ${seconds}s`;
+                    }
+                }
+
+                updateCountdown();
+                const interval = setInterval(updateCountdown, 1000);
+            });
+
+            const form = document.getElementById('bookSlotForm');
+            const slotSelect = document.getElementById('slot_id');
+
+            form.addEventListener('submit', function (event) {
+                const selectedSlotId = slotSelect.value;
+                if (!selectedSlotId) {
+                    event.preventDefault();
+                    alert('Please select a slot before booking.');
+                    return;
+                }
+                form.action = `{% url 'parking:book_slot' 0 %}`.replace('0', selectedSlotId);
+            });
+        });
+    </script>
+</body>
+</html>

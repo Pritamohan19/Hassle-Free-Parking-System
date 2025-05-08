@@ -1,0 +1,117 @@
+/* Enhanced Contact Page Styles */
+.contact-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+}
+.contact-container h1 {
+    text-align: center;
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+.contact-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.contact-container label {
+    font-weight: bold;
+    color: #555;
+    font-size: 1.1rem;
+}
+.contact-container input,
+.contact-container textarea {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+.contact-container input:focus,
+.contact-container textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+.contact-container button {
+    padding: 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.contact-container button:hover {
+    background-color: #0056b3;
+}
+.contact-container .contact-info {
+    margin-top: 30px;
+    text-align: center;
+    color: #666;
+    font-size: 1rem;
+}
+.contact-container .contact-info a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.contact-container .contact-info a:hover {
+    color: #0056b3;
+}
+
+/* General Box Styling */
+.box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Styling */
+.box-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Content Styling */
+.box-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Button Styling */
+.box .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.box .btn:hover {
+    background-color: #0056b3;
+}
+
+/* Footer Styling */
+.box-footer {
+    margin-top: 20px;
+    text-align: right;
+    font-size: 0.9rem;
+    color: #777;
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .feedback-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif;
+        }
+        .feedback-container h1 {
+            text-align: center;
+            color: #007bff;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        .feedback-container .form-group {
+            margin-bottom: 15px;
+        }
+        .feedback-container label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .feedback-container input,
+        .feedback-container select,
+        .feedback-container textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .feedback-container .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .feedback-container .button-group label {
+            flex: 1;
+            margin: 0 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .feedback-container .button-group label:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+        .feedback-container button.submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .feedback-container button.submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="feedback-container">
+        <h1>Send us your feedback!</h1>
+        <form method="POST" action="/feedback/">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="rating">Rating</label>
+                <input type="number" id="rating" name="rating" class="form-control" min="1" max="5" placeholder="Rate us (1-5)" required>
+            </div>
+            <div class="form-group">
+                <label for="comments">Comments</label>
+                <textarea id="comments" name="comments" class="form-control" rows="4" placeholder="Write your comments here..."></textarea>
+            </div>
+            
+            <!-- Goal Achievement Radio Buttons -->
+            <div class="form-group">
+                <label>Did you achieve your goal?</label>
+                <div class="button-group">
+                    <label><input type="radio" name="goal_achievement" value="Yes"> Yes</label>
+                    <label><input type="radio" name="goal_achievement" value="Partially"> Partially</label>
+                    <label><input type="radio" name="goal_achievement" value="No"> No</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reason">What was the reason for your visit?</label>
+                <select id="reason" name="reason">
+                    <option value="">Select a reason</option>
+                    <option value="Pricelist Request">Pricelist Request</option>
+                    <option value="Support">Support</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="issue">What was the reason you could not achieve your goal?</label>
+                <select id="issue" name="issue">
+                    <option value="">Select a reason</option>
+                    <option value="The form doesn't work well">The form doesn't work well</option>
+                    <option value="Information not clear">Information not clear</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="suggestions">Do you have any suggestions to make our website better?</label>
+                <textarea id="suggestions" name="suggestions" rows="4" placeholder="Write your suggestions here..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Search Results</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Results for '{{ query }}'</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subarea</th>
+                        <th>Slots</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subarea in subareas %}
+                        <tr>
+                            <td>{{ subarea.name }}</td>
+                            <td>
+                                <ul>
+                                    {% for slot in subarea.parkingslots.all %}
+                                        <li>
+                                            <a href="{% url 'parking:book_slot' slot.id %}">Slot Number: {{ slot.slot_number }}</a>
+                                        </li>
+                                    {% empty %}
+                                        <li>No slots available.</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="2">No subareas or slots available.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; {{ current_year }} My Website</p>
+    </footer>
+</body>
+</html>
