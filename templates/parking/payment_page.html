@@ -1,40 +1,89 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="box" style="max-width: 600px; margin: 50px auto;">
-                <div class="box-header">
-                    <h2>Payment for Parking</h2>
-                </div>
-                <div class="box-content">
-                    <div class="alert alert-info mb-4">
-                        <p><strong>Parking Details:</strong></p>
-                        <ul>
-                            <li><strong>Slot:</strong> {{ booking.slot.name }}</li>
-                            <li><strong>Start Time:</strong> {{ booking.start_time|date:"M d, Y H:i" }}</li>
-                            <li><strong>End Time:</strong> {{ booking.end_time|date:"M d, Y H:i" }}</li>
-                            <li><strong>Duration:</strong> 
-                                {% with duration=booking.end_time|timeuntil:booking.start_time %}
-                                {{ duration }}
-                                {% endwith %}
-                            </li>
-                            <li><strong>Amount:</strong> ₹{{ booking.amount }}</li>
-                        </ul>
-                    </div>
+<style>
+    .payment-container {
+        max-width: 700px;
+        margin: 50px auto;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        font-family: 'Arial', sans-serif;
+        border: 2px solid #333; /* Darker border */
+    }
+    .payment-header {
+        text-align: center;
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+    .payment-header h2 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+    .payment-details {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .payment-details ul {
+        list-style: none;
+        padding: 0;
+    }
+    .payment-details li {
+        margin-bottom: 10px;
+        font-size: 1rem;
+        color: #333;
+    }
+    .payment-details li strong {
+        color: #007bff;
+    }
+    .payment-button {
+        text-align: center;
+    }
+    .payment-button button {
+        background: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .payment-button button:hover {
+        background: #0056b3;
+    }
+</style>
 
-                    <div class="text-center">
-                        <h3 class="mb-4">Please complete your payment</h3>
-                        <form method="post" action="{% url 'parking:payment_success' %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="booking_id" value="{{ booking.id }}">
-                            <button type="submit" class="btn btn-primary">Pay Now</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="payment-container">
+    <div class="payment-header">
+        <h2>Payment for Parking</h2>
+    </div>
+    <div class="payment-details">
+        <p><strong>Parking Details</strong></p>
+        <ul>
+            <li><strong>Slot Number:</strong> {{ booking.parking_slot.slot_number }}</li>
+            <li><strong>Area:</strong> {{ booking.parking_slot.sub_area.area.name }}</li>
+            <li><strong>Sub-Area:</strong> {{ booking.parking_slot.sub_area.name }}</li>
+            <li><strong>Start Time:</strong> {{ booking.start_time|date:"M d, Y H:i" }}</li>
+            <li><strong>End Time:</strong> {{ booking.end_time|date:"M d, Y H:i" }}</li>
+            <li><strong>Duration:</strong> 
+                {% with duration=booking.end_time|timeuntil:booking.start_time %}
+                {{ duration }}
+                {% endwith %}
+            </li>
+            <li><strong>Amount:</strong> ₹{{ booking.amount }}</li>
+        </ul>
+    </div>
+    <div class="payment-button">
+        <h3 class="mb-4">Please complete your payment</h3>
+        <form method="post" action="{% url 'parking:payment_success' %}">
+            {% csrf_token %}
+            <input type="hidden" name="booking_id" value="{{ booking.id }}">
+            <button type="submit">Pay Now</button>
+        </form>
     </div>
 </div>
 {% endblock %}

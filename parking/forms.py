@@ -17,6 +17,9 @@ class UserRegistrationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
+        help_texts = {
+            'username': None,  # Removed the help text for username
+        }
 
     def save(self, commit=True):
         user = super().save(commit=False)

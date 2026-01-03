@@ -6,172 +6,140 @@
     <title>Register - Parking Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Your previous custom styling remains unchanged */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        /* Adjusted styling to center the register box vertically */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f6f9;
+            font-family: 'Poppins', sans-serif;
+            background: url("{% static 'media/images/Login.png' %}") no-repeat center center fixed;
+            background-size: contain; /* Adjusted size to fit within the page */
+            color: #333;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start; /* Align content to the left */
             align-items: center;
             min-height: 100vh;
+            margin: 0;
+            padding-left: 1000px; /* Add some padding for spacing */
+            padding-top: 0; /* Remove any top padding */
         }
 
         .container {
-            background-color: #fff;
-            padding: 30px 40px;
-            border-radius: 10px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            padding: 20px; /* Reduced padding */
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 400px; /* Reduced max-width */
             width: 100%;
-            max-width: 450px;
+            margin-top: auto; /* Center vertically */
+            margin-bottom: auto; /* Center vertically */
         }
 
-        h2 {
+        h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 30px;
             font-size: 28px;
-            font-weight: 700;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
 
+        /* Reduced gap between fields for a more compact layout */
         form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 1 px; /* Further reduced gap between fields */
         }
 
-        label {
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #333;
-            font-size: 14px;
-        }
-
+        /* Updated styling for uniform input fields */
         input {
-            padding: 14px;
-            border: 2px solid #e0e4e8;
+            padding: 12px;
+            border: 1px solid #ccc;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             color: #333;
-            background-color: #fafafa;
+            background-color: #f9f9f9;
             outline: none;
-            transition: border 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
         }
 
         input:focus {
-            border-color: #4f46e5;
-            box-shadow: 0 0 8px rgba(79, 70, 229, 0.3);
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+
+        button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .text-center a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .text-center a:hover {
+            text-decoration: underline;
         }
 
         .help-text {
             font-size: 12px;
-            color: #6b7280;
+            color: red;
             margin-top: 5px;
         }
 
-        .error {
-            color: red;
-            font-size: 13px;
-        }
-
-        button {
-            background-color: #4f46e5;
-            color: #fff;
-            border: none;
-            padding: 14px;
-            font-size: 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 15px;
-        }
-
-        button:hover {
-            background-color: #4338ca;
-        }
-
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #4f46e5;
-            font-size: 14px;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
         .form-group {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 10px; /* Adjusted margin for compactness */
         }
 
-        .form-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .form-row .form-group {
-            width: 48%;
+        /* Added styling for required field indicator */
+        .required-star {
+            color: red;
+            margin-left: 5px;
+            font-size: 14px;
         }
     </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const reservedAtElement = document.getElementById("reserved-at");
-            const countdownElement = document.getElementById("countdown");
-            const reservedAtTime = new Date(reservedAtElement.dataset.time); // Assuming server provides this time dynamically
-            const gracePeriod = 15 * 60 * 1000; // 15 minutes in milliseconds
-
-            function updateCountdown() {
-                const now = new Date();
-                const timeLeft = reservedAtTime.getTime() + gracePeriod - now.getTime();
-
-                if (timeLeft > 0) {
-                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                    countdownElement.textContent = `${minutes}m ${seconds}s`;
-                } else {
-                    countdownElement.textContent = "Grace period expired";
-                    clearInterval(interval);
-                }
-            }
-
-            const interval = setInterval(updateCountdown, 1000);
-            updateCountdown();
-        });
-    </script>
 </head>
 <body>
 
 <div class="container mt-5">
-    <h1>Create Your Account</h1>
+    <h1 class="text-center">Register📝</h1>
     <form method="post" action="{% url 'parking:register' %}">
         {% csrf_token %}
-        {{ form.as_p }}
+        <div class="form-group">
+            <label for="id_username">Username👤<span class="required-star">*</span></label>
+            <input type="text" name="username" maxlength="20" required id="id_username" placeholder="Enter your username">
+            <div class="help-text">(Required: 20 characters or fewer letters, digits and @/./+/-/_ only)</div>
+        </div>
+        <div class="form-group">
+            <label for="id_email">Email📧<span class="required-star">*</span></label>
+            <input type="email" name="email" required id="id_email" placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+            <label for="id_password">Password🔒<span class="required-star">*</span></label>
+            <input type="password" name="password" required id="id_password" placeholder="Enter your password">
+        </div>
+        <div class="form-group">
+            <label for="id_confirm_password">Confirm Password🔑<span class="required-star">*</span></label>
+            <input type="password" name="confirm_password" required id="id_confirm_password" placeholder="Confirm your password">
+        </div>
         <button type="submit" class="btn btn-primary w-100">Register</button>
     </form>
 
     <div class="text-center mt-3">
         <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
     </div>
-
-    <!-- Reserved At and Countdown Section -->
-    <div class="mt-4">
-        <p><strong>Reserved At:</strong> <span id="reserved-at" data-time="{{ reserved_at }}">--:--</span></p>
-        <p><strong>Grace Period Countdown:</strong> <span id="countdown">--:--</span></p>
-    </div>
 </div>
-
 <script src="{% static 'js/register.js' %}"></script>
-
 </body>
 </html>

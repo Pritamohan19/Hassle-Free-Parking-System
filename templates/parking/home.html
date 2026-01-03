@@ -9,20 +9,27 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
         #map {
             height: 400px;
             margin-top: 20px;
         }
 
+        /* Enhanced Banner Section */
         .home-banner {
             position: relative;
-            background: url('/static/images/ai_banner') no-repeat center center/cover;
+            background: url("{% static 'media/images/Background.png' %}") no-repeat center center/cover;
             height: 100vh;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
         }
 
         .home-content {
@@ -32,54 +39,277 @@
             transform: translate(-50%, -50%);
             color: white;
             text-align: center;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .home-banner h2, .home-banner label {
-            color: black;
+        .home-content h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
+        .home-content p {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .home-content a.btn {
+            font-size: 1.2rem;
+            padding: 10px 30px;
+            margin-top: 10px;
+        }
+
+        /* Enhanced Navigation Bar */
         .navbar {
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: #0056b3;
             color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 1.5rem 1rem; /* Increased padding for larger size */
         }
 
         .navbar a {
             color: white;
+            font-weight: bold;
+            font-size: 1.2rem; /* Further increased font size for links */
+            transition: color 0.3s;
         }
 
         .navbar a:hover {
             color: #f0ad4e;
         }
 
-        .home-content h1 {
-            font-size: 3rem;
-            font-weight: bold;
+        .navbar .nav-item.active .nav-link {
+            color: #f0ad4e;
+            text-decoration: underline;
         }
 
-        .home-content p {
-            font-size: 1.5rem;
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
         }
 
         .container h2 {
-            font-size: 2rem;
-            margin-top: 20px;
+            font-size: 1rem; /* Reduced font size for headings */
+            margin-top: 30px;
+            text-align: center;
+            color: #333;
+        }
+
+        .container p {
+            font-size: 1rem; /* Reduced font size */
+            line-height: 1.5; /* Adjusted line height for readability */
         }
 
         .container label {
             font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: block;
         }
 
         .container select {
             font-size: 1rem;
-            padding: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
 
         .container button {
-            font-size: 1rem;
+            font-size: 1.2rem;
             padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .container button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Refined Parking Slots Section */
+        .card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-body {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .welcome-message {
+            text-align: left;
+            margin-top: 20px;
+            margin-left: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .search-bg-section {
+            background: url("{% static 'media/images/Background.png' %}") no-repeat center center/cover;
+            position: relative;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+        .search-bg-section > * {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+        }
+        .search-bar-container {
+            background: none !important;
+            min-height: 180px;
+            margin-top: 20px; /* Push search bar further down */
+            margin-bottom: 0px; /* Reduce gap below search bar */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+        .most-searched-section {
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-bottom: 10px; /* Reduce bottom padding */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .custom-search-form {
+            display: flex;
+            width: 60%;
+            max-width: 600px;
+            background: #fff;
+            border-radius: 7px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            overflow: hidden;
+        }
+
+        .custom-search-input {
+            border: none;
+            outline: none;
+            padding: 14px 16px 14px 40px;
+            font-size: 1.1rem;
+            flex: 1;
+            color: #333;
+            background: #fff url('data:image/svg+xml;utf8,<svg fill="gray" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99c.41.41 1.09.41 1.5 0s.41-1.09 0-1.5l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>') no-repeat 12px center;
+        }
+
+        .custom-search-btn {
+            background: #007bff;
+            color: #333;
+            font-weight: bold;
+            border: none;
+            padding: 0 32px;
+            font-size: 1.1rem;
+            transition: background 0.2s;
+            border-radius: 0 7px 7px 0;
+        }
+
+        .custom-search-btn:hover {
+            background: #007bff;
+        }
+
+        .most-searched-title {
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 18px;
+            letter-spacing: 0.5px;
+        }
+        .most-searched-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .most-searched-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            padding: 18px 20px 14px 20px;
+            min-width: 200px;
+            max-width: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: box-shadow 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+        .most-searched-card:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            transform: translateY(-4px) scale(1.02);
+        }
+        .most-searched-card-content h3 {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 6px;
+            text-align: left;
+        }
+        .most-searched-card-content p {
+            color: #6c757d;
+            font-size: 0.85rem;
+            text-align: left;
+            margin-bottom: 0;
+        }
+        .most-searched-arrow {
+            font-size: 1.5rem;
+            color: #222;
+            margin-left: 10px;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        .most-searched-card:hover .most-searched-arrow {
+            color: #007bff;
+        }
+
+        /* About Us Section Enhancements */
+        #about-us {
+            background: linear-gradient(to right, #e0e0e0, #d6d6d6); /* Darker gradient */
+            padding: 50px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Our Services Section Enhancements */
+        #services {
+            background: linear-gradient(to right, #d6d6d6, #e0e0e0); /* Darker gradient */
+            padding: 50px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -88,7 +318,7 @@
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">Parking System</a>
+        <a class="navbar-brand" href="#">Hassle Free Parking System</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -96,88 +326,190 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about-us">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="#services">Our Services</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'parking:dashboard' %}">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="/contact">Contact Us</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'parking:feedback' %}">Feedback</a></li>
+                <li class="nav-item">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                    {% endif %}
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- AI Banner Section -->
-<div class="home-banner">
-    <div class="home-content">
-        <h1>Welcome, {{ user.username }}!</h1> <!-- Display the logged-in user's username -->
-        {% if user.is_authenticated %}
-            <p>Hello, {{ user.username }}! You are logged in.</p>
-        {% else %}
-            <a href="{% url 'login' %}" class="btn btn-primary mt-3">Login</a> <!-- Redirects to login.html -->
-        {% endif %}
-        <h1>Parking System</h1>
-        <nav>
-            <ul>
-                <li>Home</li>
-                <li>Dashboard</li>
-                <li>Login</li>
-                <li>Register</li>
-                <li>Contact</li>
-                <li>Feedback</li>
-            </ul>
-        </nav>
-        <h2>Available Parking Slots</h2>
-        <form method="GET" action="{% url 'parking:search_area' %}">
-            <label for="area">Select Parking Area:</label>
-            <select name="q" class="form-control" required>
-                <option value="" selected disabled>Search location here...</option>
+{% if user.is_authenticated %}
+    <div class="welcome-message">
+        <p>Welcome, {{ user.username }}!</p>
+    </div>
+{% endif %}
+
+<!-- Search and Most Searched with Background -->
+<div class="search-bg-section">
+    <div class="search-bar-container">
+        <form method="GET" action="{% url 'parking:search_area' %}" class="custom-search-form" autocomplete="off">
+            <input type="text" name="q" class="custom-search-input" placeholder="e.g. Yelahanka" list="area-list" required>
+            <datalist id="area-list">
                 {% for area in areas %}
                     <option value="{{ area.name }}">{{ area.name }}</option>
                 {% endfor %}
-            </select>
-            <button type="submit" class="btn btn-primary">Search</button>
+            </datalist>
+            <button type="submit" class="custom-search-btn">Search now</button>
         </form>
+    </div>
+    <div class="most-searched-section">
+        <h2 class="most-searched-title">Most Searched Places</h2>
+        <div class="most-searched-cards">
+            <a href="{% url 'parking:search_area' %}?q=Indiranagar" class="most-searched-card text-decoration-none">
+                <div class="most-searched-card-content">
+                    <h3>Parking Spot in Indiranagar</h3>
+                    <p>Available Now!</p>
+                </div>
+                <span class="most-searched-arrow">&#8594;</span>
+            </a>
+            <a href="{% url 'parking:search_area' %}?q=Malleshwaram" class="most-searched-card text-decoration-none">
+                <div class="most-searched-card-content">
+                    <h3>Parking Spot in Malleshwaram</h3>
+                    <p>Available Now!</p>
+                </div>
+                <span class="most-searched-arrow">&#8594;</span>
+            </a>
+            <a href="{% url 'parking:search_area' %}?q=KIAL" class="most-searched-card text-decoration-none">
+                <div class="most-searched-card-content">
+                    <h3>Parking Spot in KIAL</h3>
+                    <p>Available Now!</p>
+                </div>
+                <span class="most-searched-arrow">&#8594;</span>
+            </a>
+        </div>
     </div>
 </div>
 
-<!-- Main Content -->
-<div class="container mt-5">
-    {% if selected_area %}
-        <h3>{{ selected_area.name }}</h3>
-
-        <!-- Subareas -->
-        {% for sub_area in selected_area.subarea_set.all %}
-            <h5>Sub Area: {{ sub_area.name }}</h5>
-
-            <!-- Slots -->
-            <div class="row">
-                {% for slot in sub_area.parkingslot_set.all %}
-                    <div class="col-md-3 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Slot {{ slot.slot_number }}</h5>
-                                <p>Status:
-                                    {% if slot.is_available %}
-                                        <span class="text-success">Available</span>
-                                    {% else %}
-                                        <span class="text-danger">Booked</span>
-                                    {% endif %}
-                                </p>
-                                {% if user.is_authenticated and slot.is_available %}
-                                    <a href="{% url 'parking:book_slot' slot.id %}" class="btn btn-success btn-sm">Book Now</a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                {% empty %}
-                    <p>No slots available in this sub-area.</p>
-                {% endfor %}
-            </div>
-        {% endfor %}
-    {% endif %}
+<!-- Friendly Service Message -->
+<div class="container text-center my-5" style="max-width: 700px;">
+    <h1 style="font-size:2.8rem; font-weight:600; color:#222;">We Would love to serve you!</h1>
+    <div style="font-size:1.25rem; color:#0082a3; margin-top:10px; font-weight:500;">Get your safe and secure hassle free parking space near you</div>
 </div>
+
+<!-- Redesigned About Us Section -->
+<div class="container text-center my-5" id="about-us">
+    <h2 class="text-primary fw-bold mb-4" style="font-size: 2.8rem;">About Us</h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <p class="text-muted" style="font-size: 1.2rem; line-height: 1.8;">
+                Welcome to <span class="text-primary fw-bold">Hassle Free Parking</span> – Bengaluru’s Smartest Parking Solution. Tired of circling the streets looking for parking? So were we. That’s why we built Hassle Free Parking, a smart and simple solution to help you find, reserve, and park effortlessly in Bengaluru’s busiest neighborhoods.
+            </p>
+            <p class="text-muted" style="font-size: 1.2rem; line-height: 1.8;">
+                We offer a virtual parking platform that connects users to real-time available parking spots across <b>13+ major locations</b> including MG Road, Indiranagar, Whitefield, Electronic City, and even Kempegowda International Airport. Each main zone features <b>3–5 sub-area hotspots</b> to give you the most flexible and precise parking options.
+            </p>
+            <p class="text-muted" style="font-size: 1.2rem; line-height: 1.8;">
+                Our mission is to eliminate the frustration from your daily commute or weekend plans. Whether you're heading to work, a night out, or the airport — Hassle Free Parking ensures your spot is ready when you are.
+            </p>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-4">
+        <!-- Removed About Us images -->
+    </div>
+</div>
+
+<!-- Redesigned Our Services Section -->
+<div class="container my-5" id="services">
+    <h2 class="text-primary fw-bold mb-4 text-center" style="font-size: 2.8rem;">🛠️ Our Services</h2>
+    <p class="text-muted text-center mb-5" style="font-size: 1.2rem; line-height: 1.8; max-width: 800px; margin: auto;">
+        At <span class="text-primary fw-bold">Hassle Free Parking</span>, we provide smart, location-based parking solutions that make your life easier. Our services are designed to save you time, reduce stress, and help you navigate Bengaluru’s busiest areas with ease.
+    </p>
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; color: #007bff;">🚗</div>
+                    <h5 class="card-title mt-3 mb-2 text-primary fw-bold">Real-Time Parking Availability</h5>
+                    <p class="card-text text-muted">We provide live updates of available parking spots across 13+ major locations and 80+ sub-areas in Bengaluru, so you can plan ahead and never be left circling the block again.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; color: #007bff;">📍</div>
+                    <h5 class="card-title mt-3 mb-2 text-primary fw-bold">Location-Based Search & Filters</h5>
+                    <p class="card-text text-muted">Quickly search for parking near your destination — whether it’s an office, mall, airport, or metro station — with filters for vehicle type, duration, and amenities.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; color: #007bff;">🅿️</div>
+                    <h5 class="card-title mt-3 mb-2 text-primary fw-bold">Advance Parking Reservation</h5>
+                    <p class="card-text text-muted">Book your spot before you arrive. Our pre-booking service ensures your space is secured, giving you complete peace of mind even during peak hours.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; color: #007bff;">🔐</div>
+                    <h5 class="card-title mt-3 mb-2 text-primary fw-bold">Secure & Hassle-Free Parking</h5>
+                    <p class="card-text text-muted">All listed spots are safe, monitored, and well-maintained. Park your vehicle with confidence, knowing it’s in good hands.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; color: #007bff;">🧾</div>
+                    <h5 class="card-title mt-3 mb-2 text-primary fw-bold">Booking History & Receipts</h5>
+                    <p class="card-text text-muted">Keep track of your parking usage with downloadable receipts, transaction history, and quick rebooking options.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <div style="font-size: 2.5rem; color: #007bff;">📱</div>
+                    <h5 class="card-title mt-3 mb-2 text-primary fw-bold">User-Friendly Interface</h5>
+                    <p class="card-text text-muted">Our web platform is optimized for mobile and desktop, offering a smooth and intuitive experience for everyone — from daily commuters to weekend explorers.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer Section -->
+<footer class="bg-dark text-white py-4">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>Contact Us</h5>
+                <p>Email: support@hasslefreeparking.com</p>
+                <p>Phone: +91 98765 43210</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#about-us" class="text-white text-decoration-none">About Us</a></li>
+                    <li><a href="#services" class="text-white text-decoration-none">Our Services</a></li>
+                    <li><a href="/contact" class="text-white text-decoration-none">Contact Us</a></li>
+                    <li><a href="/privacy-policy" class="text-white text-decoration-none">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Follow Us</h5>
+                <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i> Facebook</a>
+                <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i> Twitter</a>
+                <a href="#" class="text-white"><i class="bi bi-instagram"></i> Instagram</a>
+            </div>
+        </div>
+        <hr class="bg-white">
+        <p class="mb-0">&copy; 2025 Hassle Free Parking. All Rights Reserved.</p>
+    </div>
+</footer>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

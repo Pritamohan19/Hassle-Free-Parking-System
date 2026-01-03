@@ -8,77 +8,78 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <style>
         .feedback-container {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px; /* Reduced size */
+            margin: 30px auto; /* Adjusted margin */
+            padding: 15px; /* Reduced padding */
+            background-color: #f9f9f9; /* Softer background color */
+            border-radius: 8px; /* Slightly smaller border radius */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Softer shadow */
             font-family: 'Arial', sans-serif;
         }
         .feedback-container h1 {
             text-align: center;
-            color: #007bff;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
+            color: #0056b3; /* Slightly darker blue */
+            font-size: 1.5rem; /* Reduced font size */
+            margin-bottom: 15px; /* Adjusted margin */
         }
         .feedback-container .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 10px; /* Reduced margin */
         }
         .feedback-container label {
             display: block;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 3px; /* Reduced margin */
             color: #333;
         }
         .feedback-container input,
         .feedback-container select,
         .feedback-container textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
+            width: 95%; /* Adjusted width for better alignment */
+            padding: 8px; /* Reduced padding */
+            border: 1px solid #ccc; /* Softer border color */
+            border-radius: 4px; /* Slightly smaller border radius */
+            font-size: 0.9rem; /* Reduced font size */
+            margin: 0 auto; /* Center alignment */
         }
         .feedback-container .button-group {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 15px;
+            margin-bottom: 10px; /* Reduced margin */
         }
         .feedback-container .button-group label {
             flex: 1;
-            margin: 0 5px;
-            padding: 10px;
+            margin: 0 3px; /* Reduced margin */
+            padding: 8px; /* Reduced padding */
             border: none;
-            border-radius: 5px;
-            font-size: 1rem;
+            border-radius: 4px; /* Slightly smaller border radius */
+            font-size: 0.9rem; /* Reduced font size */
             cursor: pointer;
             transition: background-color 0.3s;
         }
         .feedback-container .button-group label:hover {
-            background-color: #0056b3;
+            background-color: #004080; /* Slightly darker hover color */
             color: white;
         }
         .feedback-container button.submit-btn {
             width: 100%;
-            padding: 10px;
-            background-color: #007bff;
+            padding: 8px; /* Reduced padding */
+            background-color: #0056b3; /* Slightly darker blue */
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 1rem;
+            border-radius: 4px; /* Slightly smaller border radius */
+            font-size: 0.9rem; /* Reduced font size */
             cursor: pointer;
             transition: background-color 0.3s;
         }
         .feedback-container button.submit-btn:hover {
-            background-color: #0056b3;
+            background-color: #003d80; /* Slightly darker hover color */
         }
     </style>
 </head>
 <body>
     <div class="feedback-container">
         <h1>Send us your feedback!</h1>
-        <form method="POST" action="/feedback/">
+        <form method="POST" action="{% url 'parking:feedback' %}">
             {% csrf_token %}
             <div class="form-group">
                 <label for="rating">Rating</label>

@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from django.core.serializers.json import DjangoJSONEncoder
 from datetime import timedelta
 import json
 import math
@@ -157,6 +158,11 @@ def book_slot(request, slot_id=None):
                 try:
                     booking.clean()  # Validate slot availability
                     booking.save()
+
+                    # Mark the slot as unavailable
+                    slot.is_available = False
+                    slot.save()
+
                     messages.success(request, f"Booking successful! Reserved at {booking.reservation_time}. Your grace period ends at {booking.expiry_time}.")
                     return redirect('parking:booking_success')  # Redirect to booking_success.html
                 except ValidationError as e:
@@ -280,10 +286,16 @@ def search_area(request):
     query = request.GET.get('q', '')
     areas = Area.objects.filter(name__icontains=query) if query else Area.objects.all()
     subareas = SubArea.objects.filter(area__in=areas).prefetch_related('parkingslots')
+
+    # Fetch booked slots using the is_available field
+    booked_slots = ParkingSlot.objects.filter(is_available=False)
+    booked_slot_ids = json.dumps(list(booked_slots.values_list('id', flat=True)), cls=DjangoJSONEncoder)
+
     return render(request, 'parking/search_results.html', {
         'areas': areas,
         'subareas': subareas,
-        'query': query
+        'query': query,
+        'booked_slots': booked_slot_ids  # Pass booked slots to the template as JSON
     })
 
 # -------------------------------
@@ -322,7 +334,7 @@ def contact(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Your message has been sent successfully!")
-            return redirect('parking:contact')
+            return redirect('parking:home')
     else:
         form = ContactForm()
     return render(request, 'parking/contact.html', {'form': form})
@@ -358,7 +370,7 @@ def feedback(request):
             
         feedback.save()
         messages.success(request, "Thank you for your feedback!")
-        return redirect('parking:dashboard')
+        return redirect('parking:home')
     
     return render(request, 'parking/feedback.html')
 

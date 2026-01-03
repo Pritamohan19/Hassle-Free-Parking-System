@@ -1,28 +1,42 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
+<div class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa;">
     <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <div class="card">
-                <div class="card-body">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm" style="border-radius: 10px;">
+                <div class="card-body text-center p-5">
                     <div class="mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                         </svg>
                     </div>
-                    
-                    <h1 class="text-success mb-4">Payment Successful!</h1>
-                    
-                    <p class="lead">Thank you for using our parking service.</p>
-                    <p>Your payment has been processed successfully and your booking is now marked as completed.</p>
-                    
-                    <div class="mt-4">
-                        <a href="{% url 'parking:dashboard' %}" class="btn btn-primary">Return to Dashboard</a>
-                    </div>
+                    <h2 class="text-success mb-3" style="font-weight: 600;">Payment Successful</h2>
+                    <p class="text-muted mb-4" style="font-size: 1rem;">Thank you for your payment. Your transaction has been completed successfully. You can now proceed to manage your bookings or explore other services.</p>
+                    <a href="{% url 'parking:dashboard' %}" class="btn btn-success btn-lg" style="padding: 10px 30px; font-size: 1rem;">Go to Dashboard</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .card {
+        background-color: #ffffff;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+</style>
 {% endblock %}

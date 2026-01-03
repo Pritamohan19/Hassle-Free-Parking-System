@@ -5,7 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
         .area-container {
             display: flex;
             flex-wrap: wrap;
@@ -16,6 +27,9 @@
             padding: 10px;
             width: 45%;
             box-sizing: border-box;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         table {
             width: 100%;
@@ -23,9 +37,8 @@
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 4px;
+            padding: 8px;
             text-align: left;
-            white-space: nowrap;
         }
         th {
             background-color: #f4f4f4;
@@ -33,80 +46,157 @@
         td {
             font-size: 14px;
         }
+        .btn {
+            font-size: 14px;
+        }
+        .alert {
+            margin-top: 20px;
+        }
+        .slot-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .slot-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .slot-card i {
+            font-size: 24px;
+        }
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'parking:home' %}">Hassle Free Parking System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'parking:home' %}">Home</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container">
-        <h1 class="mb-4">User Dashboard</h1>
+        <h1 class="mb-4 text-center">User Dashboard</h1>
 
         <!-- Booking Details Section -->
-        <div>
-            <h2>Booking Details</h2>
-            <ul>
-                {% for booking in user_bookings %}
-                    <li>
-                        Booking ID: {{ booking.id }} - Slot: {{ booking.slot.slot_number }} - 
-                        Status: {{ booking.status }} - Time: {{ booking.time }}
-                    </li>
-                {% empty %}
-                    <li>No bookings found.</li>
-                {% endfor %}
-            </ul>
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2><i class="fas fa-book"></i> Booking Details</h2>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Booking ID</th>
+                            <th>Slot</th>
+                            <th>Area</th>
+                            <th>Sub-Area</th>
+                            <th>Status</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in user_bookings %}
+                            <tr>
+                                <td>{{ booking.id }}</td>
+                                <td>{{ booking.parking_slot.slot_number }}</td>
+                                <td>{{ booking.parking_slot.sub_area.area.name }}</td>
+                                <td>{{ booking.parking_slot.sub_area.name }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if booking.status == 'completed' %}badge-success
+                                        {% elif booking.status == 'reserved' %}badge-warning
+                                        {% elif booking.status == 'cancelled' %}badge-danger
+                                        {% endif %}">
+                                        {{ booking.status|title }}
+                                    </span>
+                                </td>
+                                <td>{% if booking.start_time %}{{ booking.start_time|date:"M d, Y H:i" }}{% else %}--{% endif %}</td>
+                                <td>{% if booking.end_time %}{{ booking.end_time|date:"M d, Y H:i" }}{% else %}--{% endif %}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center">No bookings found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Available Slots Section -->
-        <div>
-            <h2>Available Parking Slots</h2>
-            <div class="area-container">
-                {% for area in areas %}
-                    <div class="area">
-                        <h3>Area: {{ area.name }}</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Subarea</th>
-                                    <th>Slot Number</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for subarea in area.subareas.all %}
-                                    {% for slot in subarea.parkingslots.all %}
-                                        <tr>
-                                            {% if forloop.first %}
-                                                <td rowspan="{{ subarea.parkingslots.count }}">{{ subarea.name }}</td>
-                                            {% endif %}
-                                            <td>
-                                                <form method="post" action="{% url 'parking:book_slot' slot.id %}">
-                                                    {% csrf_token %}
-                                                    <button type="submit" class="btn btn-primary">Book Slot</button>
-                                                </form>
-                                            </td>
-                                            <td>
-                                                {% if slot.is_available %}
-                                                    <span class="text-success">Available</span>
-                                                {% else %}
-                                                    <span class="text-danger">Booked</span>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h2><i class="fas fa-parking"></i> Available Parking Slots</h2>
+            </div>
+            <div class="card-body">
+                <div class="accordion" id="parkingSlotsAccordion">
+                    {% for area in areas %}
+                        <div class="card">
+                            <div class="card-header" id="heading{{ area.id }}">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ area.id }}" aria-expanded="true" aria-controls="collapse{{ area.id }}">
+                                        Area: {{ area.name }}
+                                    </button>
+                                </h5>
+                            </div>
+
+                            <div id="collapse{{ area.id }}" class="collapse" aria-labelledby="heading{{ area.id }}" data-parent="#parkingSlotsAccordion">
+                                <div class="card-body">
+                                    {% for subarea in area.subareas.all %}
+                                        <h6>Subarea: {{ subarea.name }}</h6>
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Slot Number</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for slot in subarea.parkingslots.all %}
+                                                    <tr>
+                                                        <td>{{ slot.slot_number }}</td>
+                                                        <td>
+                                                            {% if slot.is_available %}
+                                                                <span class="badge badge-success">Available</span>
+                                                            {% else %}
+                                                                <span class="badge badge-danger">Booked</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            {% if slot.is_available %}
+                                                                <form method="post" action="{% url 'parking:book_slot' slot.id %}">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn btn-primary btn-sm">Book</button>
+                                                                </form>
+                                                            {% else %}
+                                                                <button class="btn btn-secondary btn-sm" disabled>Booked</button>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% empty %}
+                                                    <tr>
+                                                        <td colspan="3">No slots available in this subarea.</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     {% empty %}
-                                        <tr>
-                                            <td>{{ subarea.name }}</td>
-                                            <td colspan="2">No slots available in this subarea.</td>
-                                        </tr>
+                                        <p>No subareas available in this area.</p>
                                     {% endfor %}
-                                {% empty %}
-                                    <tr>
-                                        <td colspan="3">No subareas available in this area.</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                {% empty %}
-                    <p>No areas available.</p>
-                {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>No areas available.</p>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 
@@ -131,8 +221,8 @@
 
         <!-- Current Bookings Section -->
         <div class="card mb-4">
-            <div class="card-header">
-                <h2>Your Current Bookings</h2>
+            <div class="card-header bg-info text-white">
+                <h2><i class="fas fa-clock"></i> Your Current Bookings</h2>
             </div>
             <div class="card-body">
                 {% if bookings %}
@@ -212,6 +302,7 @@
             </div>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -252,6 +343,16 @@
                     return;
                 }
                 form.action = `{% url 'parking:book_slot' 0 %}`.replace('0', selectedSlotId);
+            });
+        });
+
+        $(document).ready(function () {
+            $('.collapse').on('show.bs.collapse', function () {
+                $(this).siblings('.card-header').find('.btn-link').addClass('active');
+            });
+
+            $('.collapse').on('hide.bs.collapse', function () {
+                $(this).siblings('.card-header').find('.btn-link').removeClass('active');
             });
         });
     </script>
