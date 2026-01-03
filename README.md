@@ -20,7 +20,7 @@ A Django-based web application to search, book, and manage parking slots. It inc
 
 ```powershell
 # 1) Go to the project folder
-cd "c:\Users\thati\OneDrive\Pictures\Desktop\Final Capstone Project\Hassle-Free-Parking-System"
+cd "c:\Users\thati\OneDrive\Pictures\Desktop\File\Hassle-Free-Parking-System"
 
 # 2) Create and activate a virtual environment
 python -m venv .venv
