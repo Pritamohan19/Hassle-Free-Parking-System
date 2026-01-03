@@ -20,11 +20,10 @@ A Django-based web application to search, book, and manage parking slots. It inc
 
 ```powershell
 # 1) Go to the project folder
-cd "c:\Users\thati\OneDrive\Pictures\Desktop\File\Hassle-Free-Parking-System"
+cd Hassle-Free-Parking-System
 
 # 2) Create and activate a virtual environment
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
 
 # 3) Install dependencies
 pip install -r requirements.txt
@@ -38,7 +37,6 @@ python manage.py createsuperuser
 # 6) Run the development server
 python manage.py runserver
 ```
-
 Open http://127.0.0.1:8000/ in your browser.
 
 ## Configuration notes
@@ -48,17 +46,13 @@ Open http://127.0.0.1:8000/ in your browser.
 - Templates: the main templates live under `templates/parking/`.
 
 ## Management commands
-
 There is a custom command to expire reserved bookings that were never started:
-
 ```powershell
 python manage.py expire_reserved_bookings
 ```
-
 You can schedule it (e.g., Windows Task Scheduler) to run periodically.
 
 ## Running tests
-
 A starter test file exists at `parking/tests.py`. Add unit tests using Django's test framework and run:
 
 ```powershell
@@ -66,7 +60,6 @@ python manage.py test
 ```
 
 ## Troubleshooting
-
 - If you see "Couldn't import Django", ensure your virtual environment is activated and dependencies are installed.
 - If migrations fail, check for pending model changes or delete `db.sqlite3` (development only) and re-run `migrate`.
 - For static files not loading, verify `DEBUG=True` in `core/settings.py` during development or configure static serving for production.
